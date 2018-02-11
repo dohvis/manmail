@@ -1,6 +1,6 @@
 import os.path
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 def readme():
@@ -16,6 +16,7 @@ version = '0.0.1a'
 setup(
     name='manmail',
     version=version,
+    packages=find_packages(exclude=['example.py']),
     description='Send e-mail, easier',
     long_description=readme(),
     url='https://github.com/nerogit/manmail',
