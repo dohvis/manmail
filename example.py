@@ -8,10 +8,10 @@ def main():
 
     gmail = Gmail(email_addrs, password)
     content = '''
-    <h1>Hello</h1>
-    <p>It's me</p>
+    <h1>Hello 안녕</h1>
+    <p>It's me 나야</p>
     '''
-    gmail.send_mail(to_addrs, 'title', content)
+    gmail.send_mail(to_addrs, '제목', content)
 
 
 if __name__ == '__main__':

@@ -1,38 +1,37 @@
 import smtplib
+from email.mime.text import MIMEText
 
 
 class ManMail:
-    email_template = """From: {}
-To: {}
-Subject: {}
-Content-Type: text/html; charset=utf-8
-
-{}
-"""
-
-    def __init__(self, provider, email_addrs, password):
+    def __init__(self, provider, sender_email_address, password):
         provider_stmp_servers = {
             'gmail': ('smtp.gmail.com', 465)
         }
-        self.email_addrs = email_addrs
+        self.sender_email_address = sender_email_address
         try:
             host, port = provider_stmp_servers[provider]
         except KeyError:
             raise KeyError("Unsupported provider: {}".format(provider))
         self.server = smtplib.SMTP_SSL(host, port)
         self.server.ehlo()
-        self.server.login(email_addrs, password)
+        self.server.login(sender_email_address, password)
 
-    def send_mail(self, to_addrs, subject, content):
+    def send_mail(self, to_addrs, subject, msg):
         """
         :param to_addrs: A list of addresses to send this mail to.
                             string will be treated as a list with 1 address.
         :param subject:
-        :param content:
+        :param msg:
         :return:
         """
-        content = self.email_template.format(self.email_addrs, to_addrs, subject, msg)
-        self.server.sendmail(self.email_addrs, to_addrs, content)
+
+        mail = MIMEText(msg, 'html', 'utf-8')
+        mail['From'] = self.sender_email_address
+        mail['Subject'] = subject
+
+        mail['To'] = to_addrs
+        mail = mail.as_string()
+        self.server.sendmail(self.sender_email_address, to_addrs, mail)
 
         self.server.close()
 
